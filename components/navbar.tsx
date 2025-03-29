@@ -21,17 +21,22 @@ export default function Navbar() {
       }
 
       // Determine active section based on scroll position
-      const sections = ["home", "services", "internships", "about", "contact"]
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section)
-            break
-          }
-        }
+      const sections = ["home", "services", "internships", "about", "contact"];
+
+if (typeof window !== "undefined") { // Ensure this runs only on the client
+  for (const section of sections) {
+    const element = document.getElementById(section);
+    
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      if (rect.top <= 100 && rect.bottom >= 100) {
+        setActiveSection(section);
+        break;
       }
+    }
+  }
+}
+
     }
 
     window.addEventListener("scroll", handleScroll)
