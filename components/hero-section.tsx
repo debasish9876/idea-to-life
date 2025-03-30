@@ -1,11 +1,17 @@
-"use client"
+'use client'
 
 import { useRef, useState, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import Lottie from "lottie-react"
+import dynamic from 'next/dynamic'
 import networkAnimation from "@/animations/network-animation.json"
+
+// Dynamically import Lottie with SSR disabled
+const Lottie = dynamic(() => import('lottie-react'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-gray-800 rounded-lg animate-pulse"></div>
+})
 
 export default function HeroSection() {
   const ref = useRef(null)
@@ -77,7 +83,7 @@ export default function HeroSection() {
                 Brings Ideas To Life
               </span>
             </motion.h3>
-
+                          
             <div className="h-16 mb-8">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-teal-400"></div>
@@ -107,7 +113,10 @@ export default function HeroSection() {
 
           <div className="flex justify-center px-4">
             <div className="relative w-full max-w-md">
-              <Lottie animationData={networkAnimation} className="w-full h-full" loop={true} />
+              {/* Only render Lottie on client-side */}
+              {typeof window !== 'undefined' && (
+                <Lottie animationData={networkAnimation} className="w-full h-full" loop={true} />
+              )}
             </div>
           </div>
         </div>

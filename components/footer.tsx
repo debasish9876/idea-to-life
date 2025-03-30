@@ -37,7 +37,7 @@ export default function Footer() {
   const handleScrollToSection = (sectionId) => {
     if (typeof window === "undefined") return; // Ensure this runs only on the client
     
-    const element = document.getElementById(sectionId.replace("#", ""));
+    // const element = document.getElementById(sectionId.replace("#", ""));
     
     if (element) {
       window.scrollTo({
