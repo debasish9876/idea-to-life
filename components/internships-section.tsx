@@ -24,7 +24,7 @@ export default function InternshipsSection() {
   const internshipDomains = [
     {
       title: "Web Development",
-      price: "₹1300",
+      price: "₹1500",
       icon: <Code className="w-10 h-10 text-blue-400" />,
       formLink: "https://forms.gle/5m3Dn48LUYBuSn7r9",
       description:
@@ -68,8 +68,8 @@ export default function InternshipsSection() {
       skills: ["Core Python", "Libraries", "Automation", "Web Scraping"],
     },
     {
-      title: "UI/UX Design",
-      price: "₹1300",
+      title: "Graphics Design",
+      price: "₹1000",
       icon: <Palette className="w-10 h-10 text-blue-400" />,
       formLink: "https://forms.gle/11qa4mrEfU2qxTkv7",
       description:
