@@ -24,7 +24,7 @@ export default function Footer() {
     { name: "Services", href: "#services" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
-    { name: "Privacy & Policy", href: "/privacy-policy" },
+    { name: "Privacy & Policy", href: "privacy-policy" },
   ]
 
   const services = [
