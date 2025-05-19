@@ -90,21 +90,32 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-6">Quick Links</h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <button
-                    onClick={() => handleScrollToSection(link.href)}
-                    className="text-gray-400 hover:text-teal-400 transition-colors"
-                  >
-                    {link.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Quick Links */}
+<div>
+  <h3 className="text-lg font-bold mb-6">Quick Links</h3>
+  <ul className="space-y-3">
+    {quickLinks.map((link) => (
+      <li key={link.name}>
+        {link.href.startsWith('#') ? (
+          <button
+            onClick={() => handleScrollToSection(link.href)}
+            className="text-gray-400 hover:text-teal-400 transition-colors"
+          >
+            {link.name}
+          </button>
+        ) : (
+          <Link
+            href={link.href}
+            className="text-gray-400 hover:text-teal-400 transition-colors"
+          >
+            {link.name}
+          </Link>
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
+
 
           {/* Services */}
           <div>
