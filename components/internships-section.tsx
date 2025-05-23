@@ -181,15 +181,14 @@ export default function InternshipsSection() {
             <div className="flex items-center gap-3 mb-6">
               <CheckCircle className="w-8 h-8 text-green-400" />
               <h3 className="text-2xl font-bold text-gray-100">
-                Certificate-Only Internship Options 
+                Remote Internship Opportunities 
                 <span className="text-green-400 ml-2">(Now Open)</span>
               </h3>
             </div>
             
             <div className="bg-blue-900/20 p-4 rounded-lg border border-blue-500/30 mb-6">
               <p className="text-gray-300">
-                <strong>📝 Note:</strong> This is a self-declared internship program. No mentorship, teaching, or task delivery 
-                is included. You will receive official internship documents valid for resume/college purposes.
+                <strong>📝 Note:</strong> Join our structured remote internship program featuring one-on-one mentoring, real-world project exposure, weekly progress reviews, and direct guidance from industry experts. Flexible duration options available to accommodate your schedule and career goals.
               </p>
             </div>
 
@@ -350,12 +349,11 @@ export default function InternshipsSection() {
           <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-8 rounded-xl border border-blue-500/30 shadow-lg max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-100 mb-4 flex items-center justify-center gap-2">
               <Briefcase className="w-8 h-8 text-blue-400" />
-              Ready to Get Your Internship Certificate?
+              Ready to Start Your Professional Journey?
             </h3>
             
             <p className="text-gray-300 mb-6">
-              Choose your preferred duration and get official internship documentation that's valid for your 
-              resume and college requirements. Quick processing and legitimate certificates guaranteed.
+              Pick your preferred duration and start building real-world experience through our comprehensive remote internship program. Receive personalized mentorship, work on live projects, and earn official cirtificates & other accessories that enhance your professional profile.
             </p>
             
             <a
