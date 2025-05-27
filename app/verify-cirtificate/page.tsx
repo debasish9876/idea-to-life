@@ -260,7 +260,7 @@ export default function VerifyCertificate() {
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full">
             <div className="w-2 h-2 bg-gradient-to-r from-red-500 to-blue-500 rounded-full animate-pulse"></div>
             <span className="text-gray-400 text-sm">Powered by</span>
-            <span className="text-transparent bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text font-semibold"><a href="sentientware.in">Sentientware</></span>
+            <span className="text-transparent bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text font-semibold">SentientWare</span>
             <span className="text-gray-400 text-sm">• Enterprise Security</span>
           </div>
         </div>
