@@ -110,12 +110,12 @@ export default function VerifyCertificate() {
               </h1>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-red-400" />
-                <p className="text-red-300 text-sm font-medium">Certificate Verification</p>
+                <p className="text-red-300 text-sm font-medium">Tech Solution Pvt. Ltd.</p>
               </div>
             </div>
           </div>
           <p className="text-gray-300 max-w-lg mx-auto text-lg leading-relaxed">
-            Advanced certificate authentication system with enterprise-grade security verification
+            Provide your Cirtificate-ID to check it's Authenticity & Verify.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export default function VerifyCertificate() {
               {/* Search Section */}
               <div className="relative mb-8">
                 <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Certificate Identifier
+                  Certificate-ID should start with SWT-INTERN-
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
@@ -260,8 +260,8 @@ export default function VerifyCertificate() {
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full">
             <div className="w-2 h-2 bg-gradient-to-r from-red-500 to-blue-500 rounded-full animate-pulse"></div>
             <span className="text-gray-400 text-sm">Powered by</span>
-            <span className="text-transparent bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text font-semibold">SentientWare</span>
-            <span className="text-gray-400 text-sm">• Enterprise Security</span>
+            <span className="text-transparent bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text font-semibold"><a href="sentientware.in">Sentientware</></span>
+{/*             <span className="text-gray-400 text-sm">• Enterprise Security</span> */}
           </div>
         </div>
       </div>
