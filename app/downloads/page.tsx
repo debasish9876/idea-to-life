@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import { Download, Shield, CheckCircle, XCircle, Sparkles } from 'lucide-react';
+import { Download, Shield, CheckCircle, XCircle, Sparkles, Image } from 'lucide-react';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -26,10 +26,62 @@ export default function CertificateDownloadPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useState(() => {
+    const checkMobile = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+  });
+
+  const saveToGallery = async (imageUrl: string, filename: string) => {
+    try {
+      // Create a canvas to convert the image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      return new Promise((resolve, reject) => {
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = filename;
+              link.click();
+              URL.revokeObjectURL(link.href);
+              resolve(true);
+            } else {
+              reject(new Error('Failed to create blob'));
+            }
+          }, 'image/png', 1.0);
+        };
+        
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = imageUrl;
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handleDownload = async () => {
     if (!certificateId.trim()) {
       setMessage('Please enter a certificate ID');
+      setMessageType('error');
+      return;
+    }
+
+    // Validate certificate ID format (should be numbers only)
+    if (!/^\d+$/.test(certificateId.trim())) {
+      setMessage('Please enter a valid certificate ID (numbers only)');
       setMessageType('error');
       return;
     }
@@ -39,30 +91,49 @@ export default function CertificateDownloadPage() {
     setMessageType('');
 
     try {
-      // Create reference to the certificate file
-      const certificateRef = ref(storage, `certificates/${certificateId.trim()}.pdf`);
+      // Create the full certificate ID with prefix
+      const fullCertificateId = `SWT/SU25/${certificateId.trim()}`;
       
-      // Get download URL with token for proper access
+      // Create reference to the certificate file (now PNG format)
+      const certificateRef = ref(storage, `certificates/${certificateId.trim()}.png`);
+      
+      // Get download URL
       const downloadURL = await getDownloadURL(certificateRef);
       
-      // Method 1: Try direct download with custom filename
-      const link = document.createElement('a');
-      link.href = downloadURL;
-      link.download = `${certificateId.trim()}.pdf`;
-      link.setAttribute('target', '_blank');
-      link.style.display = 'none';
+      if (isMobile) {
+        // For mobile devices, try to save to gallery
+        try {
+          await saveToGallery(downloadURL, `${fullCertificateId.replace(/\//g, '-')}.png`);
+          setMessage('Certificate saved to gallery successfully!');
+        } catch (galleryError) {
+          // Fallback to regular download
+          const link = document.createElement('a');
+          link.href = downloadURL;
+          link.download = `${fullCertificateId.replace(/\//g, '-')}.png`;
+          link.target = '_blank';
+          link.style.display = 'none';
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          setMessage('Certificate download initiated successfully!');
+        }
+      } else {
+        // For desktop, regular download
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = `${fullCertificateId.replace(/\//g, '-')}.png`;
+        link.target = '_blank';
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        setMessage('Certificate download initiated successfully!');
+      }
       
-      // Add download attribute and click
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Alternative method if above doesn't work - open with download prompt
-      setTimeout(() => {
-        window.open(downloadURL + '&attachment=true', '_blank');
-      }, 500);
-      
-      setMessage('Certificate download initiated successfully!');
       setMessageType('success');
       setCertificateId('');
       
@@ -164,24 +235,27 @@ export default function CertificateDownloadPage() {
               {/* Input Section */}
               <div className="relative mb-8">
                 <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Certificate-ID should start with SWT-INTERN-
+                  Certificate ID Format: SWT/SU25/XXX
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Download className="w-5 h-5 text-gray-400" />
                   </div>
+                  <div className="absolute inset-y-0 left-14 flex items-center pointer-events-none">
+                    <span className="text-gray-300 text-lg font-medium">SWT/SU25/</span>
+                  </div>
                   <input
                     type="text"
-                    placeholder="Enter your certificate ID"
+                    placeholder="Enter ID (e.g., 201)"
                     value={certificateId}
                     onChange={(e) => setCertificateId(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="w-full pl-14 pr-5 py-4 bg-white/10 border border-white/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 text-lg"
+                    className="w-full pl-40 pr-5 py-4 bg-white/10 border border-white/30 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 text-lg"
                     disabled={isLoading}
                   />
                 </div>
                 <p className="text-xs text-gray-400 mt-2">
-                  Enter your certificate ID without the .pdf extension
+                  Enter only the numeric part of your certificate ID (e.g., 201, 349)
                 </p>
               </div>
 
@@ -195,12 +269,12 @@ export default function CertificateDownloadPage() {
                 {isLoading ? (
                   <>
                     <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Downloading...
+                    {isMobile ? 'Saving...' : 'Downloading...'}
                   </>
                 ) : (
                   <>
-                    <Download className="w-6 h-6" />
-                    Download Certificate
+                    {isMobile ? <Image className="w-6 h-6" /> : <Download className="w-6 h-6" />}
+                    {isMobile ? 'Save to Gallery' : 'Download Certificate'}
                   </>
                 )}
               </button>
@@ -217,7 +291,9 @@ export default function CertificateDownloadPage() {
                     <CheckCircle className="w-7 h-7 text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-green-400 mb-1">Download Successful</h3>
+                    <h3 className="text-xl font-bold text-green-400 mb-1">
+                      {isMobile ? 'Save Successful' : 'Download Successful'}
+                    </h3>
                     <p className="text-green-300/80">{message}</p>
                   </div>
                 </div>
@@ -235,7 +311,9 @@ export default function CertificateDownloadPage() {
                     <XCircle className="w-7 h-7 text-red-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-red-400 mb-1">Download Failed</h3>
+                    <h3 className="text-xl font-bold text-red-400 mb-1">
+                      {isMobile ? 'Save Failed' : 'Download Failed'}
+                    </h3>
                     <p className="text-red-300/80">{message}</p>
                   </div>
                 </div>

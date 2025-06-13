@@ -30,7 +30,8 @@ export default function VerifyCertificate() {
     setLoading(true);
     const dbRef = ref(getDatabase(app));
     try {
-      const snapshot = await get(child(dbRef, `certificates/${certId}`));
+      // Use the new database structure: certificates/SU25/{certId}
+      const snapshot = await get(child(dbRef, `certificates/SU25/${certId}`));
       if (snapshot.exists()) {
         setData(snapshot.val());
         setNotFound(false);
@@ -49,6 +50,12 @@ export default function VerifyCertificate() {
     if (e.key === 'Enter') {
       handleVerify();
     }
+  };
+
+  const handleInputChange = (e) => {
+    // Only allow numbers and limit to reasonable length
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    setCertId(value);
   };
 
   return (
@@ -115,7 +122,7 @@ export default function VerifyCertificate() {
             </div>
           </div>
           <p className="text-gray-300 max-w-lg mx-auto text-lg leading-relaxed">
-            Provide your Cirtificate-ID to check it's Authenticity & Verify.
+            Enter your Certificate ID number to verify authenticity.
           </p>
         </div>
 
@@ -129,21 +136,29 @@ export default function VerifyCertificate() {
               {/* Search Section */}
               <div className="relative mb-8">
                 <label className="block text-sm font-medium text-gray-300 mb-3">
-                  Certificate-ID should start with SWT-INTERN-
+                  Enter Certificate ID (e.g., 201, 202, 203...)
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Search className="w-5 h-5 text-gray-400" />
                   </div>
+                  <div className="absolute inset-y-0 left-14 flex items-center pointer-events-none">
+                    <span className="text-gray-400 text-lg font-medium">SWT/SU25/</span>
+                  </div>
                   <input
                     type="text"
-                    placeholder="Enter your certificate ID"
+                    placeholder="Enter ID (e.g., 201)"
                     value={certId}
-                    onChange={(e) => setCertId(e.target.value)}
+                    onChange={handleInputChange}
                     onKeyPress={handleKeyPress}
-                    className="w-full pl-14 pr-5 py-4 bg-white/10 border border-white/30 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 text-lg"
+                    className="w-full pl-40 pr-5 py-4 bg-white/10 border border-white/30 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300 text-lg"
+                    // disabled={isLoading}
+                    // maxLength="10"
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Complete ID: SWT/SU25/{certId || "XXX"}
+                </p>
               </div>
 
               {/* Verify Button */}
@@ -214,23 +229,25 @@ export default function VerifyCertificate() {
                   
                   <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
                     <div className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${data.status?.toLowerCase() === 'active' ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
+                      <div className={`w-3 h-3 rounded-full ${data.status?.toLowerCase() === 'verified' ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
                       <div>
                         <p className="text-gray-400 text-sm font-medium">Status</p>
-                        <p className={`font-semibold ${data.status?.toLowerCase() === 'active' ? 'text-green-400' : 'text-red-400'}`}>
+                        <p className={`font-semibold ${data.status?.toLowerCase() === 'verified' ? 'text-green-400' : 'text-red-400'}`}>
                           {data.status}
                         </p>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Mail className="w-4 h-4 text-red-400" />
-                      <p className="text-gray-400 text-sm font-medium">Registered Email</p>
+                  {data.mailId && (
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Mail className="w-4 h-4 text-red-400" />
+                        <p className="text-gray-400 text-sm font-medium">Registered Email</p>
+                      </div>
+                      <p className="text-white font-medium break-all">{data.mailId}</p>
                     </div>
-                    <p className="text-white font-medium break-all">{data.mailId}</p>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

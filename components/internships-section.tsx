@@ -18,6 +18,8 @@ import {
   Clock,
   AlertCircle,
   CheckCircle,
+  Download,
+  ShieldCheck,
 } from "lucide-react"
 
 export default function InternshipsSection() {
@@ -324,7 +326,7 @@ export default function InternshipsSection() {
           <div className="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg">
             <h3 className="text-2xl font-bold mb-6 text-gray-100">What You Get With Our Certificate Program:</h3>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
               {perks.map((perk, index) => (
                 <div
                   key={index}
@@ -335,6 +337,34 @@ export default function InternshipsSection() {
                   <p className="text-gray-300">{perk.description}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Certificate Action Buttons */}
+            <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-6 rounded-xl border border-blue-500/30">
+              <div className="text-center mb-4">
+                <h4 className="text-xl font-bold text-gray-100 mb-2">Certificate Services</h4>
+                <p className="text-gray-300 text-sm">
+                  Download your certificates or verify existing ones
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="/downloads"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all transform hover:scale-105"
+                >
+                  <Download size={20} />
+                  Download Certificate
+                </a>
+                
+                <a
+                  href="/verify-certificate"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all transform hover:scale-105"
+                >
+                  <ShieldCheck size={20} />
+                  Verify Certificate
+                </a>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -353,7 +383,7 @@ export default function InternshipsSection() {
             </h3>
             
             <p className="text-gray-300 mb-6">
-              Pick your preferred duration and start building real-world experience through our comprehensive remote internship program. Receive personalized mentorship, work on live projects, and earn official cirtificates & other accessories that enhance your professional profile.
+              Pick your preferred duration and start building real-world experience through our comprehensive remote internship program. Receive personalized mentorship, work on live projects, and earn official certificates & other accessories that enhance your professional profile.
             </p>
             
             <a
